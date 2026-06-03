@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.claude/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+.env
+.env.*
+.vercel/
+
+# Full corpus is downloaded separately (see README); only the subset is checked in.
+data/medium-english-50mb.csv
