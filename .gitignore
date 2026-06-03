@@ -7,6 +7,7 @@ __pycache__/
 .env
 .env.*
 .vercel/
+*.pdf
 
 # Full corpus is downloaded separately (see README); only the subset is checked in.
 data/medium-english-50mb.csv
