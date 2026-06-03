@@ -9,7 +9,7 @@ from langchain_openai import OpenAIEmbeddings
 from pinecone import Pinecone, ServerlessSpec
 
 from consts import (
-    SUBSET_DATASET_FILENAME,
+    DATASET_FILENAME,
     EMBEDDING_BASE_MODEL,
     EMBEDDING_MODEL,
     LLMOD_BASE_URL,
@@ -22,7 +22,7 @@ from consts import (
 )
 
 UPSERT_BATCH_SIZE = 100
-FETCH_BATCH_SIZE = 1000
+FETCH_BATCH_SIZE = 100
 
 embeddings_model = OpenAIEmbeddings(
     api_key=os.environ["LLMOD_API_KEY"],
@@ -109,8 +109,8 @@ def upsert(pinecone_index, documents, vectors):
 
 
 def main():
-    print(f"Loading dataset: {SUBSET_DATASET_FILENAME}")
-    df = pd.read_csv(SUBSET_DATASET_FILENAME)
+    print(f"Loading dataset: {DATASET_FILENAME}")
+    df = pd.read_csv(DATASET_FILENAME)
 
     print("Splitting articles intelligently via structural boundaries...")
     documents = build_documents(df)
