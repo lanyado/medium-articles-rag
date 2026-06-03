@@ -70,10 +70,10 @@ def retrieve_chunks(question, n_articles=MIN_ARTICLES,
     Because, in each query, we only get chunks from at least one article.
     """
     query_vector = embeddings_model.embed_query(question)
-    recieved_article_ids, selected_chunks = [], []
+    received_article_ids, selected_chunks = [], []
     for _ in range(n_articles):
         articles_filter = (
-            {"article_id": {"$nin": recieved_article_ids}} if recieved_article_ids else None
+            {"article_id": {"$nin": received_article_ids}} if received_article_ids else None
         )
         scored_chunks = vectorstore.similarity_search_by_vector_with_score(
             query_vector, k=top_k, filter=articles_filter
@@ -88,9 +88,9 @@ def retrieve_chunks(question, n_articles=MIN_ARTICLES,
         for id_, chunks in chunks_by_article.items():
             chunks.sort(key=lambda chunk_score: chunk_score[1], reverse=True)
             selected_chunks.extend(chunks[:chunks_per_article])
-            recieved_article_ids.append(id_)
+            received_article_ids.append(id_)
 
-        if len(recieved_article_ids) >= n_articles:
+        if len(received_article_ids) >= n_articles:
             return selected_chunks
 
     return selected_chunks

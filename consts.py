@@ -22,7 +22,8 @@ TOP_K = 15 # chunks fetched per query (llm recieves chunks_per_article * article
 MIN_ARTICLES = 3 # distinct articles returned
 CHUNKS_PER_ARTICLE = 3 # best chunks kept per article
 
-LLM_SYSTEM_PROMPT = """You are a Medium-article assistant that answers questions strictly and only based on the Medium articles dataset context provided to you (metadata and article passages). You must not use any external knowledge, the open internet, or information that is not explicitly contained in the retrieved context. If the answer cannot be determined from the provided context, respond: “I don’t know based on the provided Medium articles data.” Always explain your answer using the given context, quoting or paraphrasing the relevant article passage or metadata when helpful."""
+LLM_SYSTEM_PROMPT_STYLE = "Use commas to separate the article titles and authors in the response."
+LLM_SYSTEM_PROMPT = f"""You are a Medium-article assistant that answers questions strictly and only based on the Medium articles dataset context provided to you (metadata and article passages). You must not use any external knowledge, the open internet, or information that is not explicitly contained in the retrieved context. If the answer cannot be determined from the provided context, respond: “I don’t know based on the provided Medium articles data.” Always explain your answer using the given context, quoting or paraphrasing the relevant article passage or metadata when helpful. {LLM_SYSTEM_PROMPT_STYLE}"""
 
 USER_QUERIES = [
     "Find an article that reframes marketing as a conversation with readers, aimed at writers who find self-promotion uncomfortable. Provide the title and author.",
