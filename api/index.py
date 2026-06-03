@@ -19,7 +19,7 @@ from consts import (
     CHUNK_SIZE,
     OVERLAP_RATIO,
     TOP_K,
-    MAX_ARTICLES,
+    MIN_ARTICLES,
     CHUNKS_PER_ARTICLE,
     LLM_SYSTEM_PROMPT,
 )
@@ -59,14 +59,14 @@ document_prompt = PromptTemplate.from_template(
 )
 
 
-def retrieve_chunks(question, n_articles=MAX_ARTICLES,
+def retrieve_chunks(question, n_articles=MIN_ARTICLES,
                       chunks_per_article=CHUNKS_PER_ARTICLE, top_k=TOP_K):
     """
     The user only cares about ARTICLES, not chunks.
     The user's questions are: find one article, list 3 articles, summarize one article, recommend one article.
     So an article's score = its highest-scored chunk.
     One query usually returns chunks from enough distinct articles. 
-    If not, re-query excluding articles we already got, up to MAX_ARTICLES times.
+    If not, re-query excluding articles we already got, up to MIN_ARTICLES times.
     Because, in each query, we only get chunks from at least one article.
     """
     query_vector = embeddings_model.embed_query(question)
@@ -90,8 +90,8 @@ def retrieve_chunks(question, n_articles=MAX_ARTICLES,
             selected_chunks.extend(chunks[:chunks_per_article])
             recieved_article_ids.append(id_)
 
-            if len(recieved_article_ids) == n_articles:
-                return selected_chunks
+        if len(recieved_article_ids) >= n_articles:
+            return selected_chunks
 
     return selected_chunks
 

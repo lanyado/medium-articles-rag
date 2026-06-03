@@ -16,9 +16,11 @@ LLMOD_BASE_URL = "https://api.llmod.ai/v1"
 CHUNK_SIZE = 512 # Tokens
 OVERLAP_RATIO = 0.1 # 10%
 
-TOP_K = 10 # chunks that reach the final llm
-MAX_ARTICLES = 3 # distinct articles returned
-CHUNKS_PER_ARTICLE = 2 # best chunks kept per article
+PINECONE_BATCH_SIZE = 100 # For fetching and upserting during indexing
+
+TOP_K = 15 # chunks fetched per query (llm recieves chunks_per_article * articles_in_query, usually 6–15)
+MIN_ARTICLES = 3 # distinct articles returned
+CHUNKS_PER_ARTICLE = 3 # best chunks kept per article
 
 LLM_SYSTEM_PROMPT = """You are a Medium-article assistant that answers questions strictly and only based on the Medium articles dataset context provided to you (metadata and article passages). You must not use any external knowledge, the open internet, or information that is not explicitly contained in the retrieved context. If the answer cannot be determined from the provided context, respond: “I don’t know based on the provided Medium articles data.” Always explain your answer using the given context, quoting or paraphrasing the relevant article passage or metadata when helpful."""
 

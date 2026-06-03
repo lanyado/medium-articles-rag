@@ -19,10 +19,8 @@ from consts import (
     PINECONE_REGION,
     CHUNK_SIZE,
     OVERLAP_RATIO,
+    PINECONE_BATCH_SIZE,
 )
-
-UPSERT_BATCH_SIZE = 100
-FETCH_BATCH_SIZE = 100
 
 embeddings_model = OpenAIEmbeddings(
     api_key=os.environ["LLMOD_API_KEY"],
@@ -86,8 +84,8 @@ def ensure_index():
 
 def existing_ids(pinecone_index, ids):
     found = set()
-    for i in range(0, len(ids), FETCH_BATCH_SIZE):
-        batch = ids[i:i + FETCH_BATCH_SIZE]
+    for i in range(0, len(ids), PINECONE_BATCH_SIZE):
+        batch = ids[i:i + PINECONE_BATCH_SIZE]
         found.update(pinecone_index.fetch(ids=batch, namespace=PINECONE_NAMESPACE).vectors.keys())
     return found
 
@@ -101,9 +99,9 @@ def upsert(pinecone_index, documents, vectors):
         }
         for doc, vector in zip(documents, vectors)
     ]
-    for i in range(0, len(records), UPSERT_BATCH_SIZE):
+    for i in range(0, len(records), PINECONE_BATCH_SIZE):
         pinecone_index.upsert(
-            vectors=records[i:i + UPSERT_BATCH_SIZE],
+            vectors=records[i:i + PINECONE_BATCH_SIZE],
             namespace=PINECONE_NAMESPACE,
         )
 
